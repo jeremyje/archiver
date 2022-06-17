@@ -148,6 +148,9 @@ func nameOnDiskToNameInArchive(nameOnDisk, rootOnDisk, rootInArchive string) str
 //
 // For example, "a/b/c" => "b/c".
 func trimTopDir(dir string) string {
+	if len(dir) > 0 && dir[0] == '.' {
+		dir = dir[1:]
+	}
 	if len(dir) > 0 && dir[0] == '/' {
 		dir = dir[1:]
 	}
@@ -162,6 +165,9 @@ func trimTopDir(dir string) string {
 //
 // For example, "a/b/c" => "a".
 func topDir(dir string) string {
+	if len(dir) > 0 && dir[0] == '.' {
+		dir = dir[1:]
+	}
 	if len(dir) > 0 && dir[0] == '/' {
 		dir = dir[1:]
 	}
@@ -222,6 +228,8 @@ func openAndCopyFile(file File, w io.Writer) error {
 // filenameList; meaning it is in the list, its parent folder/path
 // is in the list, or the list is nil.
 func fileIsIncluded(filenameList []string, filename string) bool {
+	// Archives are sometimes prefixed with ./ via tar cf archive.tar .
+	filename = strings.TrimPrefix(filename, "./")
 	// include all files if there is no specific list
 	if filenameList == nil {
 		return true

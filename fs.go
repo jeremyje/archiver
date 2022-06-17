@@ -438,7 +438,7 @@ func (f ArchiveFS) ReadDir(name string) ([]fs.DirEntry, error) {
 	entries := make(map[string]fs.DirEntry)
 	handler := func(_ context.Context, file File) error {
 		// directories may end with trailing slash; standardize name
-		trimmedName := strings.Trim(file.NameInArchive, "/")
+		trimmedName := strings.TrimPrefix(strings.Trim(file.NameInArchive, "/"), "./")
 
 		// don't include the named directory itself in the list of entries
 		if trimmedName == name {
