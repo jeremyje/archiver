@@ -438,7 +438,7 @@ func (f ArchiveFS) ReadDir(name string) ([]fs.DirEntry, error) {
 	entries := make(map[string]fs.DirEntry)
 	handler := func(_ context.Context, file File) error {
 		// directories may end with trailing slash; standardize name
-		trimmedName := strings.TrimPrefix(strings.Trim(file.NameInArchive, "/"), "./")
+		trimmedName := strings.Trim(filepath.Clean(file.NameInArchive), "/")
 
 		// don't include the named directory itself in the list of entries
 		if trimmedName == name {
@@ -461,7 +461,7 @@ func (f ArchiveFS) ReadDir(name string) ([]fs.DirEntry, error) {
 			remainingPath := file.NameInArchive
 
 			if name != "." {
-				remainingPath = strings.TrimPrefix(file.NameInArchive, name)
+				remainingPath = strings.TrimPrefix(filepath.Clean(file.NameInArchive), name)
 			}
 			nextDir := topDir(remainingPath)        // if name in archive is "a/b/c" and root is "a", this becomes "b" (the implied folder to add)
 			implicitDir := path.Join(name, nextDir) // the full path of the implied directory

@@ -12,6 +12,7 @@ func TestTrimTopDir(t *testing.T) {
 		input string
 		want  string
 	}{
+		{input: "./a/b/c", want: "b/c"},
 		{input: "a/b/c", want: "b/c"},
 		{input: "a", want: "a"},
 		{input: "abc/def", want: "def"},
@@ -32,6 +33,7 @@ func TestTopDir(t *testing.T) {
 		input string
 		want  string
 	}{
+		{input: "./a/b/c", want: "a"},
 		{input: "a/b/c", want: "a"},
 		{input: "a", want: "a"},
 		{input: "abc/def", want: "abc"},
